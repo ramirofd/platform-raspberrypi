@@ -37,6 +37,12 @@
       "owner": "platformio",
       "version": "~3.5.4"
     },
+    "framework-arduino-mbed-usb": {
+      "type": "framework",
+      "optional": true,
+      "owner": "ramirofd",
+      "version": "https://github.com/ramirofd/ArduinoCore-mbed.git"
+    },
     "tool-rp2040tools": {
       "type": "uploader",
       "owner": "platformio",
