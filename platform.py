@@ -23,6 +23,23 @@ class RaspberrypiPlatform(PlatformBase):
         return True
 
     def configure_default_packages(self, variables, targets):
+        board = variables.get("board")
+        board_config = self.board_config(board)
+        build_core = variables.get(
+            "board_build.core", board_config.get("build.core", "arduino"))
+
+        frameworks = variables.get("pioframework", [])
+        if "arduino" in frameworks:
+            if build_core == "arduino":
+                self.frameworks["arduino"]["package"] = "framework-arduino-mbed"
+                self.packages["framework-arduinopico"]["optional"] = True
+            elif build_core == "ramirofd":
+                self.frameworks["arduino"]["package"] = "framework-arduino-mbed-usb"
+                self.packages["framework-arduino-mbed"]["optional"] = True             
+            else:
+                sys.stderr.write(
+                    "Error! Unknown build.core value '%s'. Don't know which Arduino core package to use." % build_core)
+                env.Exit(1)
         # configure J-LINK tool
         jlink_conds = [
             "jlink" in variables.get(option, "")
